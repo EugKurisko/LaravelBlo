@@ -18,7 +18,7 @@ class PostsController extends Controller
     public function index()
     {
         //take everything from database
-        $posts = DB::table('posts')->paginate(3);
+        $posts = DB::table('posts')->paginate(5);
         return view('posts.index')->with('posts', $posts);
     }
 
@@ -83,8 +83,11 @@ class PostsController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        //dd($request->image);
+        if ($request->image != null) {
+            File::delete(public_path() . '/images/' . $post->image_name);
+        }
         $this->checkInput($request);
-        //dd($request->image->name);
         $this->writeToDb($request, $post);
         return redirect('posts')->with('success', 'Post added');
     }
@@ -109,7 +112,6 @@ class PostsController extends Controller
             'body' => 'required',
             'img' => 'image|max:1999|mimes:png,jpg'
         ]);
-        //dd($request->image);
         if ($request->image) {
             $this->validateImage($request);
         }
@@ -120,11 +122,11 @@ class PostsController extends Controller
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         $post->user_id = auth()->user()->id;
-        $post->image_name = $request->image->name ?? 'noImage.jpg';
+        $post->image_name = $request->image->name ?? $post->image_name ?? '';
         $post->save();
     }
 
-    private function validateImage(Request &$request)
+    private function validateImage(Request $request)
     {
         $name = $request->image->getClientOriginalName();
         $imageNameToStore = time() . $name;
