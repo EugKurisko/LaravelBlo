@@ -32,6 +32,9 @@
                     @else
                     <h1 class="text-center">There are no posts</h1>
                     @endif
+                    <div class="text-center">
+                        <a href="/posts/create" class="btn btn-success mt-4">Create Post</a>
+                    </div>
                 </div>
             </div>
         </div>
