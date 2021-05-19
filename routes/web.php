@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PostsController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,14 +16,10 @@ use App\Http\Controllers\PostsController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 //pages
 Route::get('/', [PagesController::class, 'index']);
 Route::get('/about', [PagesController::class, 'about']);
-Route::get('/welcome', function(){
+Route::get('/welcome', function () {
     return view('welcome');
 });
 //authorization
@@ -32,5 +29,3 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //posts
 Route::resource('posts', PostsController::class);
-
-
