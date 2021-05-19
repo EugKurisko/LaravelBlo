@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    @if (!empty($posts))
+    @if (count($posts) > 0)
         @foreach ($posts as $post)
         <div class="card mt-4">
             <div class="card-body">
@@ -15,7 +15,7 @@
         </div>
         @endforeach
     @else
-        There are no posts
+        <h1 class="text-center">There are no posts</h1>
     @endif
     <div class="mt-4">
         {{ $posts->links() }}

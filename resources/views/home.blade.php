@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    @if (!empty($posts))
+                    @if (count($posts) > 0)
                     <h1 class="text-center">Your Posts</h1>
                         @foreach ($posts as $post)
                         <div class="card mt-4">
@@ -26,6 +26,14 @@
                                     {{ substr($post->body, 0, 7) . ' ...'}}
                                 </p>
                                 <small>Created at {{ $post->created_at }} by {{ $post->user->name ?? '' }}</small>
+                                <div>
+                                    <a class="btn btn-success mt-4" href="{{ $post->id }}/edit">Edit</a>
+                                    <form action="{{ route('posts.destroy', ['post' => $post]) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger float-right" type="submit">Delete</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         @endforeach
