@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PostsController extends Controller
 {
@@ -15,7 +17,7 @@ class PostsController extends Controller
     public function index()
     {
         //take everything from database
-        $posts = Post::all();
+        $posts = DB::table('posts')->paginate(3);
         return view('posts.index')->with('posts', $posts);
     }
 
@@ -26,7 +28,10 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        if (Auth::user()) {
+            return view('posts.create');
+        }
+        return redirect('posts');
     }
 
     /**
@@ -37,16 +42,9 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|max:64',
-            'body' => 'required',
-        ]);
-
+        $this->checkInput($request);
         $post = new Post();
-        $post->title = $request->input('title');
-        $post->body = $request->input('body');
-        $post->user_id = 0;
-        $post->save();
+        $this->writeToDb($request, $post);
         return redirect('posts')->with('success', 'Post added');
     }
 
@@ -69,7 +67,10 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        if (Auth::user()) {
+            return view('posts.edit')->with('post', $post);
+        }
+        return redirect('posts');
     }
 
     /**
@@ -81,7 +82,9 @@ class PostsController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $this->checkInput($request);
+        $this->writeToDb($request, $post);
+        return redirect('posts')->with('success', 'Post added');
     }
 
     /**
@@ -92,6 +95,23 @@ class PostsController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect('posts')->with('success', 'Post deleted');
+    }
+
+    private function checkInput(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|max:64',
+            'body' => 'required',
+        ]);
+    }
+
+    private function writeToDb(Request $request, Post $post)
+    {
+        $post->title = $request->input('title');
+        $post->body = $request->input('body');
+        $post->user_id = auth()->user()->id;
+        $post->save();
     }
 }
