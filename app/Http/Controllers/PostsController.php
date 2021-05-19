@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 
 class PostsController extends Controller
@@ -83,6 +84,7 @@ class PostsController extends Controller
     public function update(Request $request, Post $post)
     {
         $this->checkInput($request);
+        //dd($request->image->name);
         $this->writeToDb($request, $post);
         return redirect('posts')->with('success', 'Post added');
     }
@@ -96,6 +98,7 @@ class PostsController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
+        File::delete(public_path() . '/images/' . $post->image_name);
         return redirect('posts')->with('success', 'Post deleted');
     }
 
@@ -104,7 +107,12 @@ class PostsController extends Controller
         $request->validate([
             'title' => 'required|max:64',
             'body' => 'required',
+            'img' => 'image|max:1999|mimes:png,jpg'
         ]);
+        //dd($request->image);
+        if ($request->image) {
+            $this->validateImage($request);
+        }
     }
 
     private function writeToDb(Request $request, Post $post)
@@ -112,6 +120,15 @@ class PostsController extends Controller
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         $post->user_id = auth()->user()->id;
+        $post->image_name = $request->image->name ?? 'noImage.jpg';
         $post->save();
+    }
+
+    private function validateImage(Request &$request)
+    {
+        $name = $request->image->getClientOriginalName();
+        $imageNameToStore = time() . $name;
+        $request->image->name = $imageNameToStore;
+        $request->image->move(public_path('images'), $imageNameToStore);
     }
 }
