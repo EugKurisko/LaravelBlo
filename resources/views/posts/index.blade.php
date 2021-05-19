@@ -10,11 +10,14 @@
                 <p class="card-text">
                     {{ substr($post->body, 0, 7) . ' ...'}}
                 </p>
-                <small>Created at {{ $post->created_at }} by</small>
+                <small>Created at {{ $post->created_at }} by {{ $post->user->name ?? '' }}</small>
             </div>
         </div>
         @endforeach
     @else
         There are no posts
     @endif
+    <div class="mt-4">
+        {{ $posts->links() }}
+    </div>
 @endsection
