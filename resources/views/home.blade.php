@@ -27,7 +27,7 @@
                                 </p>
                                 <small>Created at {{ $post->created_at }} by {{ $post->user->name ?? '' }}</small>
                                 <div>
-                                    <a class="btn btn-success mt-4" href="{{ $post->id }}/edit">Edit</a>
+                                    <a class="btn btn-success mt-4" href="/posts/{{ $post->id }}/edit">Edit</a>
                                     <form action="{{ route('posts.destroy', ['post' => $post]) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
