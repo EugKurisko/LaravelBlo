@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -57,7 +58,9 @@ class PostsController extends Controller
      */
     public function show(Post $post)
     {
-        return view('posts.show')->with('post', $post);
+        $comments = Comment::where('post_id', '=', $post->id)->get();
+        //dd($comments);
+        return view('posts.show', ['post' => $post, 'comments' => $comments]);
     }
 
     /**
