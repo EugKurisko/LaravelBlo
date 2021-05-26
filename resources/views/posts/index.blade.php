@@ -10,7 +10,10 @@
                     <div class="col-md-3">
                         <img class="rounded d-block w-100 h-100" src="{{ url('/images') }}/{{  $post->image_name }}" alt="image" style="width: 100%; height: 500px">
                     </div>
-                        @endif
+                    @else
+                    <div class="col-md-3">
+                    </div>
+                    @endif
                     <div class="col-md-8" style="height: 100%">
                         <h1 class="card-title">
                             <a class="text-decoration-none" href="/posts/{{ $post->id }}">{{ $post->title }}</a>
