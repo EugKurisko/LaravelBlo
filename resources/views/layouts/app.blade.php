@@ -23,6 +23,7 @@
     <div id="app">
         @include('inc.navbar')
         <div class="container mt-4">
+            @include('inc.messages')
             @yield('content')
         </div>
     </div>
