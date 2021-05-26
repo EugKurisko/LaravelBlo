@@ -45,4 +45,11 @@ $('#leaveCom').on('click', function (e) {
             }
         })
     })
+});
+
+//timer for flash-messages
+jQuery(function () {
+    setTimeout(function () {
+        $("#message").remove();
+    }, 2000);
 })
