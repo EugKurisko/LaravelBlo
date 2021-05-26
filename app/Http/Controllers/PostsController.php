@@ -47,7 +47,7 @@ class PostsController extends Controller
         $this->checkInput($request);
         $post = new Post();
         $this->writeToDb($request, $post);
-        return redirect('posts')->with('success', 'Post added');
+        return redirect('home')->with('success', 'Post added');
     }
 
     /**
@@ -59,7 +59,6 @@ class PostsController extends Controller
     public function show(Post $post)
     {
         $comments = Comment::where('post_id', '=', $post->id)->get();
-        //dd($comments);
         return view('posts.show', ['post' => $post, 'comments' => $comments]);
     }
 
@@ -72,7 +71,7 @@ class PostsController extends Controller
     public function edit(Post $post)
     {
         if (Auth::user()) {
-            return view('posts.edit')->with('post', $post);
+            return view('posts.edit', ['post' => $post, 'message' => 'Post edited']);
         }
         return redirect('posts');
     }
@@ -86,13 +85,12 @@ class PostsController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //dd($request->image);
         if ($request->image != null) {
             File::delete(public_path() . '/images/' . $post->image_name);
         }
         $this->checkInput($request);
         $this->writeToDb($request, $post);
-        return redirect('posts')->with('success', 'Post added');
+        return redirect('posts/' . $post->id)->with('success', 'Post edited');
     }
 
     /**
