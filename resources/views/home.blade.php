@@ -25,7 +25,8 @@
                                 <p class="card-text">
                                     {{ substr($post->body, 0, 7) . ' ...'}}
                                 </p>
-                                <small>Created at {{ $post->created_at }} by {{ $post->user->name ?? '' }}</small>
+                                <small>Created on {{ date('Y-m-d', strtotime($post->created_at)) }} 
+                                    at {{ date('H:i:s', strtotime($post->created_at)) }} by {{ $post->user->name ?? '' }}</small>
                                 <div>
                                     <a class="btn btn-success mt-4" href="/posts/{{ $post->id }}/edit">Edit</a>
                                     <form action="{{ route('posts.destroy', ['post' => $post]) }}" method="POST">
