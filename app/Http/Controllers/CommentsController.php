@@ -24,9 +24,4 @@ class CommentsController extends Controller
         $comment->user->name = $request->userName;
         return response()->json($comment);
     }
-
-    public function destroy($id)
-    {
-        //
-    }
 }
