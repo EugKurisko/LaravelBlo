@@ -33,7 +33,7 @@ class PostsController extends Controller
         if (Auth::user()) {
             return view('posts.create');
         }
-        return redirect('posts');
+        return redirect('posts')->with('error', 'You don\'t have permisson to enter this page');
     }
 
     /**
@@ -73,7 +73,7 @@ class PostsController extends Controller
         if (Auth::user()) {
             return view('posts.edit', ['post' => $post, 'message' => 'Post edited']);
         }
-        return redirect('posts');
+        return redirect('posts')->with('error', 'You don\'t have permisson to enter this page');
     }
 
     /**
@@ -102,6 +102,8 @@ class PostsController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
+        Comment::where('post_id', $post->id)->delete();
+        //$post->user->comment->comment->delete();
         File::delete(public_path() . '/images/' . $post->image_name);
         return redirect('posts')->with('success', 'Post deleted');
     }
