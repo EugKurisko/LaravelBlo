@@ -23,7 +23,8 @@
                             @endif
                         </p>
                         <div>
-                            <small>Created at {{ $post->created_at }} by {{ $post->user->name ?? '' }}</small>
+                            <small>Created on {{ date('Y-m-d', strtotime($post->created_at)) }} 
+                                at {{ date('H:i:s', strtotime($post->created_at)) }} by {{ $post->user->name ?? '' }}</small>
                         </div>
                     </div>
                     
