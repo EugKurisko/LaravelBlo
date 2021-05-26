@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\AjaxController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -29,3 +31,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //posts
 Route::resource('posts', PostsController::class);
+//comments
+Route::post('store', [CommentsController::class, 'store']);
